@@ -32,30 +32,21 @@ def agglomerate(affs, thresholds, gt = None, fragments = None, aff_threshold_low
 
     thresholds.sort()
     for threshold in thresholds:
-
         merge_history = mergeUntil(state, threshold)
-
         result = (segmentation,)
-
         if gt is not None:
-
             stats = {}
             stats['V_Rand_split'] = state.metrics.rand_split
             stats['V_Rand_merge'] = state.metrics.rand_merge
             stats['V_Info_split'] = state.metrics.voi_split
             stats['V_Info_merge'] = state.metrics.voi_merge
-
             result += (stats,)
-
         if return_merge_history:
-
             result += (merge_history,)
-
         if len(result) == 1:
             yield result[0]
         else:
             yield result
-
     free(state)
 
 def __initialize(

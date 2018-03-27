@@ -1,5 +1,4 @@
 __version__ = '0.8'
-
 def agglomerate(
         affs,
         thresholds,
@@ -239,3 +238,7 @@ def agglomerate(
             build_extension.run()
 
     return __import__(module_name).agglomerate(affs, thresholds, gt, fragments, aff_threshold_low, aff_threshold_high, return_merge_history)
+
+
+from seg_watershed import watershed
+from seg_waterz import waterz
