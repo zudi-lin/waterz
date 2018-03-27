@@ -4,11 +4,9 @@ setup(
         name='waterz',
         version='0.8',
         description='Simple watershed and agglomeration for affinity graphs.',
-        url='https://github.com/funkey/waterz',
-        author='Jan Funke',
-        author_email='jfunke@iri.upc.edu',
+        url='https://github.com/donglaiw/waterz',
         license='MIT',
-        requires=['cython','numpy'],
+        requires=['cython','numpy','scipy'],
         packages=['waterz'],
         package_data={
             '': [

@@ -1,6 +1,7 @@
 import os, sys
 import numpy as np
 import h5py
+import json
 
 from seg_watershed import watershed
 from waterz import agglomerate
@@ -25,14 +26,14 @@ def getScoreFunc(scoreF):
 def waterz(
         affs,
         thresholds,
-        output_prefix = None,
+        output_prefix = './',
         merge_function = None,
         gt = None,
         custom_fragments = True,
         discretize_queue = 256,
         fragments_mask = None,
         aff_threshold  = [0.0001,0.9999],
-        return_seg = False):
+        return_seg = True):
 
     # affs shape: 3*z*y*x
     thresholds = list(thresholds)
@@ -55,16 +56,16 @@ def waterz(
             discretize_queue=discretize_queue)):
 
         threshold = thresholds[i]
-        if output_prefix is not None:
-            output_basename = output_prefix+merge_function+'_%.2f'%threshold
-            print "Storing segmentation..."
-            if gt is not None:
-                seg = out[0]
-            else:
-                seg = out
-            writeh5(output_basename + '.hdf', 'main', seg)
+        output_basename = output_prefix+merge_function+'_%.2f'%threshold
+        if gt is not None:
+            seg = out[0]
+        else:
+            seg = out
         if return_seg:
             outs.append(seg)
+        else:
+            print "Storing segmentation..."
+            writeh5(output_basename + '.hdf', 'main', seg)
         if gt is not None:
             metrics = out[1]
             print "Storing record..."
@@ -72,7 +73,7 @@ def waterz(
                 'threshold': threshold,
                 'merge_function': merge_function,
                 'custom_fragments': custom_fragments,
-                'discrete_queue': discrete_queue,
+                'discretize_queue': discretize_queue,
                 'voi_split': metrics['V_Info_split'],
                 'voi_merge': metrics['V_Info_merge'],
                 'rand_split': metrics['V_Rand_split'],
