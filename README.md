@@ -12,11 +12,11 @@ import numpy as np
 # affinities is a [3,depth,height,width] numpy array of float32
 affinities = ...
 # evaluation: vi/rand
-seg_gt = ...
+seg_gt = None
 
 aff_thresholds = [0.005, 0.995]
 seg_thresholds = [0.1, 0.3, 0.6]
 
-seg = waterz.(aff, seg_thresholds, merge_function='aff50_his256',                                
+seg = waterz.waterz(aff, seg_thresholds, merge_function='aff50_his256',                                
               aff_threshold=aff_thresholds, gt=seg_gt)
 ```
