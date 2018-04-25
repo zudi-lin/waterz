@@ -4,14 +4,8 @@ import h5py
 import json
 
 from seg_watershed import watershed
-from seg_util import create_border_mask
+from seg_util import create_border_mask, writeh5
 from waterz import agglomerate
-
-def writeh5(filename, datasetname, dtarray):                                                         
-    fid=h5py.File(filename,'w')
-    ds = fid.create_dataset(datasetname, dtarray.shape, compression="gzip", dtype=dtarray.dtype)
-    ds[:] = dtarray
-    fid.close()
 
 def getScoreFunc(scoreF):
     # aff50_his256
@@ -48,7 +42,7 @@ def waterz(
             fragments[fragments_mask==False] = 0
     outs=[]
     if gt is not None and gt_border !=0:
-        gt = create_border_mask(gt, gt_border, np.uint64(-1))
+        gt = create_border_mask(gt, gt_border, np.uint64(0))
 
     for i,out in enumerate(agglomerate(
             affs,

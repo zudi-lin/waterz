@@ -2,6 +2,13 @@ import h5py
 import numpy as np
 import scipy
 
+def writeh5(filename, datasetname, dtarray):                                                         
+    fid=h5py.File(filename,'w')
+    ds = fid.create_dataset(datasetname, dtarray.shape, compression="gzip", dtype=dtarray.dtype)
+    ds[:] = dtarray
+    fid.close()
+
+
 def create_border_mask(input_data, max_dist, background_label,axis=0):
     """
     Overlay a border mask with background_label onto input data.
