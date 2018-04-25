@@ -1,26 +1,22 @@
 # waterz
+Pronounced water-zed. A simple watershed and region agglomeration library for affinity graphs.
 
-Pronounced *water-zed*. A simple watershed and region agglomeration library for
-affinity graphs.
-
-Based on the watershed implementation of [Aleksandar Zlateski](https://bitbucket.org/poozh/watershed) and [Chandan Singh](https://github.com/TuragaLab/zwatershed).
-
-# Installation
-
-`python setup.py install`
-
-Requires `numpy` and `cython`.
+# Features in this fork
+Incorporate functions from Mala_v2.zip from [http://cremi.org](CREMI.org) for better segmentation result
 
 # Usage
-
 ```
 import waterz
 import numpy as np
 
 # affinities is a [3,depth,height,width] numpy array of float32
 affinities = ...
+# evaluation: vi/rand
+seg_gt = None
 
-thresholds = [0, 100, 200]
+aff_thresholds = [0.005, 0.995]
+seg_thresholds = [0.1, 0.3, 0.6]
 
-segmentations = waterz.agglomerate(affinities, thresholds)
+seg = waterz.waterz(aff, seg_thresholds, merge_function='aff50_his256',                                
+              aff_threshold=aff_thresholds, gt=seg_gt)
 ```
