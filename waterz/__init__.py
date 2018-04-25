@@ -241,4 +241,5 @@ def agglomerate(
 
 
 from seg_watershed import watershed
+from seg_util import create_border_mask
 from seg_waterz import waterz

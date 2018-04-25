@@ -4,6 +4,7 @@ import h5py
 import json
 
 from seg_watershed import watershed
+from seg_util import create_border_mask
 from waterz import agglomerate
 
 def writeh5(filename, datasetname, dtarray):                                                         
@@ -29,6 +30,7 @@ def waterz(
         output_prefix = './',
         merge_function = None,
         gt = None,
+        gt_border = 25/4.0,
         custom_fragments = True,
         discretize_queue = 256,
         fragments_mask = None,
@@ -45,6 +47,9 @@ def waterz(
         if fragments_mask is not None:
             fragments[fragments_mask==False] = 0
     outs=[]
+    if gt is not None and gt_border !=0:
+        gt = create_border_mask(gt, gt_border, np.uint64(-1))
+
     for i,out in enumerate(agglomerate(
             affs,
             thresholds,
