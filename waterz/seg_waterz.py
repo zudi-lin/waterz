@@ -61,7 +61,7 @@ def waterz(
         else:
             seg = out
         if return_seg:
-            outs.append(seg)
+            outs.append(seg.copy())
         else:
             print "Storing segmentation..."
             writeh5(output_basename + '.hdf', 'main', seg)
