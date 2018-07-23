@@ -25,7 +25,7 @@ def waterz(
         merge_function = None,
         gt = None,
         gt_border = 25/4.0,
-        custom_fragments = True,
+        fragments = None,
         discretize_queue = 256,
         fragments_mask = None,
         aff_threshold  = [0.0001,0.9999],
@@ -35,8 +35,7 @@ def waterz(
     thresholds = list(thresholds)
     print "waterz at thresholds " + str(thresholds)
 
-    fragments = None
-    if custom_fragments:
+    if fragments is None:
         fragments = watershed(affs, 'maxima_distance')
         if fragments_mask is not None:
             fragments[fragments_mask==False] = 0
