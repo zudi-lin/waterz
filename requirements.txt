@@ -1,0 +1,11 @@
+certifi==2018.4.16
+Cython==0.28.4
+h5py==2.8.0
+linecache2==1.0.0
+mahotas==1.4.4
+mkl==2018.0.3
+numpy==1.14.5
+scipy==1.1.0
+six==1.11.0
+traceback2==1.4.0
+unittest2==1.1.0
