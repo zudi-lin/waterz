@@ -177,7 +177,7 @@ Metrics __compare_volumes(const GtID* gt,
 					boost::extents[width][height][depth]
 			)
 	);
-	auto m = compare_volumes(groundtruth, segmentation);
+	auto m = compare_volumes(*groundtruth, *segmentation);
 	Metrics metrics;
 	metrics.rand_split = std::get<0>(m);
 	metrics.rand_merge = std::get<1>(m);

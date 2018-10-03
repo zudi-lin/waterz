@@ -59,9 +59,8 @@ def __compile(scoring_function='Multiply<OneMinus<MaxAffinity<AffinitiesType>>, 
             if force_rebuild:
                 raise ImportError
             else:
-                __import__(module_name)
-
-            print("Re-using already compiled waterz version")
+                print("Re-using already compiled waterz version")
+                return module_name
 
         except ImportError:
 
