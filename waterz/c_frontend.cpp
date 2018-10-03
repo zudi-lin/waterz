@@ -159,3 +159,29 @@ free(WaterzState& state) {
 
 	WaterzContext::free(state.context);
 }
+
+Metrics __compare_volumes(const GtID* gt,
+		SegID* ws,
+		size_t width,
+		size_t height,
+		size_t depth) {
+	volume_ref_ptr<SegID> segmentation(
+			new volume_ref<SegID>(
+					ws,
+					boost::extents[width][height][depth]
+			)
+	);
+	volume_const_ref_ptr<GtID> groundtruth(
+			new volume_const_ref<GtID>(
+					gt,
+					boost::extents[width][height][depth]
+			)
+	);
+	auto m = compare_volumes(groundtruth, segmentation);
+	Metrics metrics;
+	metrics.rand_split = std::get<0>(m);
+	metrics.rand_merge = std::get<1>(m);
+	metrics.voi_split  = std::get<2>(m);
+	metrics.voi_merge  = std::get<3>(m);
+	return metrics;
+}

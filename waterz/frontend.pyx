@@ -75,6 +75,13 @@ def __initialize(
         aff_threshold_high,
         find_fragments)
 
+
+def compare_volumes(np.ndarray[uint32_t, ndim=3] gt not None,
+                np.ndarray[uint64_t, ndim=3] ws not None):
+    gt = np.ascontiguousarray(gt)
+    ws = np.ascontiguousarray(ws)
+    return __compare_volumes(&gt[0, 0, 0], &ws[0, 0, 0], gt.shape[0], gt.shape[1], gt.shape[2])
+
 cdef extern from "c_frontend.h":
 
     struct Metrics:
@@ -109,3 +116,10 @@ cdef extern from "c_frontend.h":
             float        threshold)
 
     void free(WaterzState& state)
+
+    Metrics __compare_volumes(
+            const uint32_t* gt,
+            uint64_t* ws,
+            size_t width,
+            size_t height,
+            size_t depth)
