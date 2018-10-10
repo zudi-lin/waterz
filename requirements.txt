@@ -4,6 +4,7 @@ h5py==2.8.0
 linecache2==1.0.0
 mahotas==1.4.4
 mkl==2018.0.3
+boost
 numpy==1.14.5
 scipy==1.1.0
 six==1.11.0
