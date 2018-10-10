@@ -1,8 +1,7 @@
-__version__ = '0.8'
-
 from __future__ import absolute_import
 from .evaluate import evaluate
 
+__version__ = '0.8'
 
 def __compile(scoring_function='Multiply<OneMinus<MaxAffinity<AffinitiesType>>, MinSize<SizesType>>',
               discretize_queue=0,
