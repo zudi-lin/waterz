@@ -8,3 +8,4 @@ build
 *.sw[pmno]
 zwatershed/frontend.cpp
 zwatershed/parallel.cpp
+zwatershed/*.cpp
