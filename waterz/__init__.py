@@ -253,6 +253,6 @@ def compare_volumes(gt, ws, force_rebuild = False):
     return __import__(module_name).compare_volumes(gt, ws)
 
 
-from seg_watershed import watershed
-from seg_util import create_border_mask
-from seg_waterz import waterz
+from .seg_watershed import watershed
+from .seg_util import create_border_mask
+from .seg_waterz import waterz
