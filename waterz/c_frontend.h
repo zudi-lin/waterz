@@ -146,4 +146,10 @@ std::vector<Merge> mergeUntil(
 
 void free(WaterzState& state);
 
+Metrics __compare_volumes(const uint32_t* gt,
+						uint64_t* ws,
+						size_t width,
+						size_t height,
+						size_t depth);
+
 #endif
