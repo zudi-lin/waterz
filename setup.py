@@ -1,4 +1,5 @@
 from setuptools import setup
+from distutils.sysconfig import get_python_inc
 from setuptools.extension import Extension
 from Cython.Build import cythonize
 import numpy
@@ -8,7 +9,7 @@ source_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'waterz')
 include_dirs = [
     source_dir,
     os.path.join(source_dir, 'backend'),
-    # os.path.dirname(get_python_inc()),
+    os.path.dirname(get_python_inc()),
     numpy.get_include(),
 ]
 extensions = [
