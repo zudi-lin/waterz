@@ -3,7 +3,7 @@ from .evaluate import evaluate
 
 __version__ = '0.8'
 
-def __compile(scoring_function='Multiply<OneMinus<MaxAffinity<AffinitiesType>>, MinSize<SizesType>>',
+def __compile(scoring_function='OneMinus<MeanAffinity<RegionGraphType, ScoreValue>>',
               discretize_queue=0,
               force_rebuild=False):
     import sys
@@ -30,10 +30,9 @@ def __compile(scoring_function='Multiply<OneMinus<MaxAffinity<AffinitiesType>>, 
 
     source_dir = os.path.dirname(os.path.abspath(__file__))
     source_files = [
-        os.path.join(source_dir, 'frontend.pyx'),
-        os.path.join(source_dir, 'c_frontend.h'),
-        os.path.join(source_dir, 'c_frontend.cpp'),
-        os.path.join(source_dir, 'evaluate.hpp')
+        os.path.join(source_dir, 'agglomerate.pyx'),
+        os.path.join(source_dir, 'frontend_agglomerate.h'),
+        os.path.join(source_dir, 'frontend_agglomerate.cpp')
     ]
     source_files += glob.glob(source_dir + '/backend/*.hpp')
     source_files.sort()
@@ -96,12 +95,12 @@ def __compile(scoring_function='Multiply<OneMinus<MaxAffinity<AffinitiesType>>, 
 
             # cython requires that the pyx file has the same name as the module
             shutil.copy(
-                os.path.join(source_dir, 'frontend.pyx'),
+                os.path.join(source_dir, 'agglomerate.pyx'),
                 os.path.join(lib_dir, module_name + '.pyx')
             )
             shutil.copy(
-                os.path.join(source_dir, 'c_frontend.cpp'),
-                os.path.join(lib_dir, module_name + '_c_frontend.cpp')
+                os.path.join(source_dir, 'frontend_agglomerate.cpp'),
+                os.path.join(lib_dir, module_name + '_frontend_agglomerate.cpp')
             )
 
             # Remove the "-Wstrict-prototypes" compiler option, which isn't valid
@@ -114,7 +113,7 @@ def __compile(scoring_function='Multiply<OneMinus<MaxAffinity<AffinitiesType>>, 
                 module_name,
                 sources = [
                     os.path.join(lib_dir, module_name + '.pyx'),
-                    os.path.join(lib_dir, module_name + '_c_frontend.cpp')
+                    os.path.join(lib_dir, module_name + '_frontend_agglomerate.cpp')
                 ],
                 include_dirs=include_dirs,
                 language='c++',
@@ -138,7 +137,8 @@ def agglomerate(
         aff_threshold_low=0.0001,
         aff_threshold_high=0.9999,
         return_merge_history=False,
-        scoring_function='Multiply<OneMinus<MaxAffinity<AffinitiesType>>, MinSize<SizesType>>',
+        return_region_graph = False,
+        scoring_function='OneMinus<MeanAffinity<RegionGraphType, ScoreValue>>',
         discretize_queue=0,
         force_rebuild=False):
     '''
@@ -246,11 +246,15 @@ def agglomerate(
             # ...
     '''
     module_name = __compile(scoring_function, discretize_queue, force_rebuild)
-    return __import__(module_name).agglomerate(affs, thresholds, gt, fragments, aff_threshold_low, aff_threshold_high, return_merge_history)
-
-def compare_volumes(gt, ws, force_rebuild = False):
-    module_name = __compile(force_rebuild=force_rebuild)
-    return __import__(module_name).compare_volumes(gt, ws)
+    return __import__(module_name).agglomerate(
+        affs, 
+        thresholds, 
+        gt, 
+        fragments, 
+        aff_threshold_low, 
+        aff_threshold_high, 
+        return_merge_history,
+        return_region_graph)
 
 
 from .seg_watershed import watershed
