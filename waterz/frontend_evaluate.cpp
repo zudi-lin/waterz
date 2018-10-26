@@ -1,22 +1,22 @@
 #include "frontend_evaluate.h"
-#include "evaluate.hpp"
+
 
 Metrics
 compare_arrays(
         std::size_t  width,
         std::size_t  height,
         std::size_t  depth,
-        const SegID* gt_data,
-        const SegID* segmentation_data) {
+        const uint64_t* gt_data,
+        const uint64_t* segmentation_data) {
 
     // wrap gt array (no copy)
-    volume_const_ref<SegID> gt(
+    volume_const_ref<uint64_t> gt(
             gt_data,
             boost::extents[width][height][depth]
     );
 
     // wrap segmentation array (no copy)
-    volume_const_ref<SegID> segmentation(
+    volume_const_ref<uint64_t> segmentation(
             segmentation_data,
             boost::extents[width][height][depth]
     );
@@ -31,3 +31,70 @@ compare_arrays(
 
     return metrics;
 }
+
+Statistics
+compute_statistics(
+        std::size_t  width,
+        std::size_t  height,
+        std::size_t  depth,
+        const uint16_t* gt_data,
+        const uint16_t* segmentation_data) {
+    volume_const_ref<uint16_t> gt(
+            gt_data,
+            boost::extents[width][height][depth]
+    );
+
+    // wrap segmentation array (no copy)
+    volume_const_ref<uint16_t> segmentation(
+            segmentation_data,
+            boost::extents[width][height][depth]
+    );
+    Statistics output;
+    output.total = 0;
+    compute_stats(output.total, output.p_ij, output.s_i, 
+    output.t_j, gt, segmentation);
+    return output;
+        
+}
+
+
+
+Statistics
+compute_statistics(
+        Statistics& stats,
+        std::size_t  width,
+        std::size_t  height,
+        std::size_t  depth,
+        const uint16_t* gt_data,
+        const uint16_t* segmentation_data) {
+    volume_const_ref<uint16_t> gt(
+            gt_data,
+            boost::extents[width][height][depth]
+    );
+
+    // wrap segmentation array (no copy)
+    volume_const_ref<uint16_t> segmentation(
+            segmentation_data,
+            boost::extents[width][height][depth]
+    );
+    compute_stats(stats.total, 
+    stats.p_ij, 
+    stats.s_i, 
+    stats.t_j, 
+    gt,
+    segmentation);
+    return stats;
+}
+
+Metrics
+compute_metrics(Statistics& stats) {
+    auto m = compute_mets(stats.total, stats.p_ij, stats.s_i, stats.t_j);
+    Metrics metrics;
+    metrics.rand_split = std::get<0>(m);
+    metrics.rand_merge = std::get<1>(m);
+    metrics.voi_split  = std::get<2>(m);
+    metrics.voi_merge  = std::get<3>(m);
+
+    return metrics;
+}
+
