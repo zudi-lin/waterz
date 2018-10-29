@@ -32,8 +32,11 @@ compare_arrays(
     return metrics;
 }
 
-Statistics
-compute_statistics(
+
+
+void
+update_statistics(
+        Statistics* stats,
         std::size_t  width,
         std::size_t  height,
         std::size_t  depth,
@@ -49,46 +52,17 @@ compute_statistics(
             segmentation_data,
             boost::extents[width][height][depth]
     );
-    Statistics output;
-    output.total = 0;
-    compute_stats(output.total, output.p_ij, output.s_i, 
-    output.t_j, gt, segmentation);
-    return output;
-        
-}
-
-
-
-Statistics
-compute_statistics(
-        Statistics& stats,
-        std::size_t  width,
-        std::size_t  height,
-        std::size_t  depth,
-        const uint16_t* gt_data,
-        const uint16_t* segmentation_data) {
-    volume_const_ref<uint16_t> gt(
-            gt_data,
-            boost::extents[width][height][depth]
-    );
-
-    // wrap segmentation array (no copy)
-    volume_const_ref<uint16_t> segmentation(
-            segmentation_data,
-            boost::extents[width][height][depth]
-    );
-    compute_stats(stats.total, 
-    stats.p_ij, 
-    stats.s_i, 
-    stats.t_j, 
+    compute_stats(&(stats->total), 
+    &(stats->p_ij), 
+    &(stats->s_i), 
+    &(stats->t_j), 
     gt,
     segmentation);
-    return stats;
 }
 
 Metrics
-compute_metrics(Statistics& stats) {
-    auto m = compute_mets(stats.total, stats.p_ij, stats.s_i, stats.t_j);
+compute_metrics(Statistics *stats) {
+    auto m = compute_mets(&(stats->total), &(stats->p_ij), &(stats->s_i), &(stats->t_j));
     Metrics metrics;
     metrics.rand_split = std::get<0>(m);
     metrics.rand_merge = std::get<1>(m);

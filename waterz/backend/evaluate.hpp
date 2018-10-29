@@ -114,10 +114,10 @@ compare_volumes(
 
 template <typename T>
 void
-compute_stats(double& total, 
-	std::map<T, std::map<T, double>>& p_ij, 
-	std::map<T, double>& s_i,
-	std::map<T, double>& t_j,
+compute_stats(double* total, 
+	std::map<T, std::map<T, double>>* p_ij, 
+	std::map<T, double>* s_i,
+	std::map<T, double>* t_j,
 	const volume_const_ref<T>& gt, 
 	const volume_const_ref<T>& ws){
 	size_t dimX = gt.shape()[0];
@@ -132,10 +132,10 @@ compute_stats(double& total,
 		T gtv = gt[x][y][z];
 		if ( gtv )
 		{
-			++total;
-			++p_ij[gtv][wsv];
-			++s_i[wsv];
-			++t_j[gtv];
+			++(*total);
+			++(*p_ij)[gtv][wsv];
+			++(*s_i)[wsv];
+			++(*t_j)[gtv];
 		}
 	}
 }
@@ -143,55 +143,55 @@ compute_stats(double& total,
 
 template <typename T>
 std::tuple<double,double,double,double>
-compute_mets(double& total, 
-	std::map<T, std::map<T, double>>& p_ij,
-	std::map<T, double>& s_i,
-	std::map<T, double>& t_j){
+compute_mets(double* total, 
+	std::map<T, std::map<T, double>>* p_ij,
+	std::map<T, double>* s_i,
+	std::map<T, double>* t_j){
 	double sum_p_ij = 0;
-	for ( auto& a: p_ij )
+	for ( auto& a: *p_ij )
 		for ( auto& b: a.second )
 			sum_p_ij += b.second * b.second;
 
 	// sum of squares in t_j
 	double sum_t_k = 0;
-	for ( auto& a: t_j )
+	for ( auto& a: *t_j )
 		sum_t_k += a.second * a.second;
 
 	// sum of squares in s_i
 	double sum_s_k = 0;
-	for ( auto& a: s_i )
+	for ( auto& a: *s_i )
 		sum_s_k += a.second * a.second;
 
 	// we have everything we need for RAND, normalize histograms for VOI
 
-	for ( auto& a: p_ij )
+	for ( auto& a: *p_ij )
 		for ( auto& b: a.second )
-			b.second /= total;
+			b.second /= *total;
 
-	for ( auto& a: t_j )
-		a.second /= total;
+	for ( auto& a: *t_j )
+		a.second /= *total;
 
-	for ( auto& a: s_i )
-		a.second /= total;
+	for ( auto& a: *s_i )
+		a.second /= *total;
 
 	// compute entropies
 
 	// H(s,t)
 	double H_st = 0;
-	for ( auto& a: p_ij )
+	for ( auto& a: *p_ij )
 		for ( auto& b: a.second )
 			if(b.second)
 				H_st -= b.second * log2(b.second);
 
 	// H(t)
 	double H_t = 0;
-	for ( auto& a: t_j )
+	for ( auto& a: *t_j )
 		if(a.second)
 			H_t -= a.second * log2(a.second);
 
 	// H(s)
 	double H_s = 0;
-	for ( auto& a: s_i )
+	for ( auto& a: *s_i )
 		if(a.second)
 			H_s -= a.second * log2(a.second);
 

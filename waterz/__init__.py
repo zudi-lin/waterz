@@ -1,6 +1,6 @@
 from __future__ import absolute_import
-from .evaluate import evaluate_total_volume, compute_statistics_for_volume, \
-    compute_statistics_for_volume_init, compute_final_metrics
+from .evaluate import evaluate_total_volume, initialize_stats, update_statistics_using_volume, \
+    compute_final_metrics
 
 __version__ = '0.8'
 
