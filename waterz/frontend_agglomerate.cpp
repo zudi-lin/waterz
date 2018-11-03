@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "frontend_agglomerate.h"
-#include "evaluate.hpp"
+#include "backend/evaluate.hpp"
 #include "backend/MergeFunctions.hpp"
 #include "backend/basic_watershed.hpp"
 #include "backend/region_graph.hpp"

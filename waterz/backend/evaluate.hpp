@@ -8,11 +8,9 @@
 
 using namespace std;
 
-template <typename T>
+template <typename V1, typename V2>
 std::tuple<double,double,double,double>
-compare_volumes(
-				 const volume_const_ref<T>& gt,
-				 const volume_const_ref<T>& ws){
+compare_volumes(const V1& gt, const V2& ws){
 
 	size_t dimX = gt.shape()[0];
 	size_t dimY = gt.shape()[1];
@@ -21,17 +19,17 @@ compare_volumes(
 	double total = 0;
 
 	// number of co-occurences of label i and j
-	std::map<T, std::map<T, double>> p_ij;
+	std::map<uint64_t, std::map<uint64_t, double>> p_ij;
 
 	// number of occurences of label i and j in the respective volumes
-	std::map<T, double> s_i, t_j;
+	std::map<uint64_t, double> s_i, t_j;
 
 	for ( std::ptrdiff_t z = 0; z < dimZ; ++z )
 		for ( std::ptrdiff_t y = 0; y < dimY; ++y )
 			for ( std::ptrdiff_t x = 0; x < dimX; ++x )
 			{
-				T wsv = ws[x][y][z];
-				T gtv = gt[x][y][z];
+				uint64_t wsv = ws[x][y][z];
+				uint64_t gtv = gt[x][y][z];
 
 				if ( gtv )
 				{

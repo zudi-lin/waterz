@@ -2,8 +2,10 @@
 #define MERGE_FUNCTIONS_H__
 
 #include "RegionSizeProvider.hpp"
+#include "ContactAreaProvider.hpp"
 #include "MinAffinityProvider.hpp"
 #include "MaxAffinityProvider.hpp"
+#include "MeanAffinityProvider.hpp"
 #include "HistogramQuantileProvider.hpp"
 #include "VectorQuantileProvider.hpp"
 #include "MaxKAffinityProvider.hpp"
@@ -105,11 +107,14 @@ using MinAffinity = EdgeStatisticValue<RegionGraphType, MinAffinityProvider<Regi
 template <typename RegionGraphType, typename Precision>
 using MaxAffinity = EdgeStatisticValue<RegionGraphType, MaxAffinityProvider<RegionGraphType, Precision>>;
 
-template <typename RegionGraphType, int Quantile, typename Precision, int Bins>
-using HistogramQuantileAffinity = EdgeStatisticValue<RegionGraphType, HistogramQuantileProvider<RegionGraphType, Quantile, Precision, Bins>>;
+template <typename RegionGraphType, typename Precision>
+using MeanAffinity = EdgeStatisticValue<RegionGraphType, MeanAffinityProvider<RegionGraphType, Precision>>;
 
-template <typename RegionGraphType, int Quantile, typename Precision>
-using QuantileAffinity = EdgeStatisticValue<RegionGraphType, VectorQuantileProvider<RegionGraphType, Quantile, Precision>>;
+template <typename RegionGraphType, int Quantile, typename Precision, int Bins, bool InitWithMax = true>
+using HistogramQuantileAffinity = EdgeStatisticValue<RegionGraphType, HistogramQuantileProvider<RegionGraphType, Quantile, Precision, Bins, InitWithMax>>;
+
+template <typename RegionGraphType, int Quantile, typename Precision, bool InitWithMax = true>
+using QuantileAffinity = EdgeStatisticValue<RegionGraphType, VectorQuantileProvider<RegionGraphType, Quantile, Precision, InitWithMax>>;
 
 /**
  * Scores edges with the mean of the max k affinities.
@@ -137,6 +142,12 @@ private:
 
 	const StatisticsProviderType& _maxKAffinityProvider;
 };
+
+/**
+ * Scores edges with the size of the contact area.
+ */
+template <typename RegionGraphType>
+using ContactArea = EdgeStatisticValue<RegionGraphType, ContactAreaProvider<RegionGraphType>>;
 
 /**
  * Scores edges with a random number between 0 and 1.
@@ -193,4 +204,3 @@ private:
 };
 
 #endif // MERGE_FUNCTIONS_H__
-
