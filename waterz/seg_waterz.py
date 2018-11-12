@@ -51,7 +51,8 @@ def waterz(
             aff_threshold_high = aff_threshold[1],
             fragments=fragments,
             scoring_function=getScoreFunc(merge_function),
-            discretize_queue=discretize_queue)):
+            discretize_queue=discretize_queue,
+            force_rebuild=True)):
 
         threshold = thresholds[i]
         output_basename = output_prefix+merge_function+'_%.2f'%threshold
