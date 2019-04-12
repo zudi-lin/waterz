@@ -3,8 +3,8 @@ import numpy as np
 import h5py
 import json
 
-from seg_watershed import watershed
-from seg_util import create_border_mask, writeh5
+from .seg_watershed import watershed
+from .seg_util import create_border_mask, writeh5
 from waterz import agglomerate
 
 def getScoreFunc(scoreF):
