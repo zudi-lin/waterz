@@ -71,7 +71,6 @@ def waterz(
             record = {
                 'threshold': threshold,
                 'merge_function': merge_function,
-                'custom_fragments': custom_fragments,
                 'discretize_queue': discretize_queue,
                 'voi_split': metrics['V_Info_split'],
                 'voi_merge': metrics['V_Info_merge'],
