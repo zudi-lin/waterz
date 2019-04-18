@@ -6,4 +6,5 @@ frontend.cpp
 */build
 */*.c
 */*.so
-
+._*
+.DS_Store
