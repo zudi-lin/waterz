@@ -29,7 +29,8 @@ def waterz(
         discretize_queue = 256,
         fragments_mask = None,
         aff_threshold  = [0.0001,0.9999],
-        return_seg = True):
+        return_seg = True,
+        save_recored = False):
 
     # affs shape: 3*z*y*x
     thresholds = list(thresholds)
@@ -77,7 +78,8 @@ def waterz(
                 'rand_split': metrics['V_Rand_split'],
                 'rand_merge': metrics['V_Rand_merge'],
             }
-            with open(output_basename + '.json', 'w') as f:
-                json.dump(record, f)
+            if save_recored==True:
+                with open(output_basename + '.json', 'w') as f:
+                    json.dump(record, f)
     if return_seg:
         return outs
